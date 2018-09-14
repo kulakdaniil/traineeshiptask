@@ -30,6 +30,7 @@ public class User implements Serializable {
     private Timestamp createdDate;
 
     public User() {
+        // Do nothing because by default
     }
 
     public int getId() {

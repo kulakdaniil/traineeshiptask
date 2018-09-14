@@ -20,6 +20,8 @@ import java.util.List;
 public class UserController {
     private static final int ROWS_ON_PAGE = 18;
     private static final Logger logger = Logger.getLogger(UserController.class);
+    private static final String USER_TABLE = "userTable";
+    private static final String USER_LIST = "userList";
 
     public UserController() {
         System.out.println("UserController()");
@@ -63,33 +65,33 @@ public class UserController {
     public ModelAndView searchUser(@RequestParam("searchName") String searchName){
         logger.info("Search for user: " + searchName);
         List<User> userList = iUserService.getAllUsers(searchName);
-        return new ModelAndView("userTable", "userList", userList);
+        return new ModelAndView(USER_TABLE, USER_LIST, userList);
     }
 
     @RequestMapping(value = {"getAllUsers"})
     public ModelAndView getAllUsers(){
         logger.info("Get all users.");
         List<User> userList = iUserService.getAllUsers();
-        return new ModelAndView("userTable", "userList", userList);
+        return new ModelAndView(USER_TABLE, USER_LIST, userList);
     }
 
     @RequestMapping(value="/")
     public ModelAndView listOfUsers(@RequestParam(required = false) Integer page) {
         logger.info("Get all users.");
-        ModelAndView modelAndView = new ModelAndView("userTable");
+        ModelAndView modelAndView = new ModelAndView(USER_TABLE);
         List<User> userList = iUserService.getAllUsers();
         PagedListHolder<User> pagedListHolder = new PagedListHolder<>(userList);
         pagedListHolder.setPageSize(ROWS_ON_PAGE);
         modelAndView.addObject("maxPage", pagedListHolder.getPageCount());
-        if (page == null || page < 1 || page > pagedListHolder.getPageCount()) page=1;
-        modelAndView.addObject("page", page);
         if (page == null || page < 1 || page > pagedListHolder.getPageCount()) {
+            page = 1;
+            modelAndView.addObject("page", page);
             pagedListHolder.setPage(0);
-            modelAndView.addObject("userList", pagedListHolder.getPageList());
+            modelAndView.addObject(USER_LIST, pagedListHolder.getPageList());
         }
         else if (page <= pagedListHolder.getPageCount()) {
             pagedListHolder.setPage(page-1);
-            modelAndView.addObject("userList", pagedListHolder.getPageList());
+            modelAndView.addObject(USER_LIST, pagedListHolder.getPageList());
         }
         return modelAndView;
     }

@@ -36,7 +36,7 @@ public class HibernateSF {
 
     @SuppressWarnings("unchecked")
     public <T> T getRecordById(Serializable id, Class<T> entityClass) {
-        return (T) sessionFactory.getCurrentSession().get(entityClass, id);
+        return sessionFactory.getCurrentSession().get(entityClass, id);
     }
 
     @SuppressWarnings("unchecked")
@@ -45,5 +45,5 @@ public class HibernateSF {
     }
 
     @SuppressWarnings("rawtypes")
-    public <T> List getAllRecords(String sqlQuery) {return sessionFactory.getCurrentSession().createNativeQuery(sqlQuery).list();}
+    public <T> List<T> getAllRecords(String sqlQuery) {return sessionFactory.getCurrentSession().createNativeQuery(sqlQuery).list();}
 }
